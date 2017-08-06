@@ -44,7 +44,7 @@ for root, dirs, filenames in os.walk(inputdir):
         file_name, file_extension = os.path.splitext(filename)
         
         file = open(outputdir + subdir + file_name + '.txt', 'w')
-        file.write(formatter.markdown)
+        file.write(formatter.kirbytext)
         file.close()
 
 # remove empty directories from outputfolder
