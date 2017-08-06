@@ -2,6 +2,9 @@
 
 import os
 
+import io
+from contextlib import redirect_stdout
+
 from html2kirby import HTML2Kirby
 
 inputdir = os.getcwd()
@@ -9,6 +12,8 @@ basename = os.path.basename(inputdir)
 outputdir = '../' + basename + '-kirby'
 
 i = 0
+
+print()
 
 # make outputfolder for converted files
 if not os.path.exists(outputdir):
@@ -39,9 +44,16 @@ for root, dirs, filenames in os.walk(inputdir):
 
         # call html2kirby
         formatter = HTML2Kirby()
-        formatter.feed(markup)
+
+        # call formatter, but catch stdout
+        f = io.StringIO()
+        with redirect_stdout(f):
+            formatter.feed(markup)
+        s = f.getvalue()
 
         file_name, file_extension = os.path.splitext(filename)
+
+        print(subdir, file_name, '=> ', s.count('Ignored tag'), 'tags ignored')
         
         file = open(outputdir + subdir + file_name + '.txt', 'w')
         file.write(formatter.kirbytext)
