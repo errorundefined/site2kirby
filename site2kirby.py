@@ -31,8 +31,10 @@ for root, dirs, filenames in os.walk(inputdir):
 
         i += 1
 
-        if root.lstrip(inputdir):
-            subdir = '/' + root.lstrip(inputdir) + '/'
+        relroot = root.replace(inputdir,'')
+
+        if relroot:
+            subdir = relroot + '/'
         else:
             subdir = '/'
 
@@ -53,9 +55,12 @@ for root, dirs, filenames in os.walk(inputdir):
 
         file_name, file_extension = os.path.splitext(filename)
 
-        print(subdir, file_name, '=> ', s.count('Ignored tag'), 'tags ignored')
+        outputpath = '#' + str(i) + ' [' + subdir + file_name + '] =>'
+
+        print(outputpath, s.count('Ignored tag'), 'tags ignored')
+        path = outputdir + subdir + file_name + '.txt'
         
-        file = open(outputdir + subdir + file_name + '.txt', 'w')
+        file = open(path, 'w')
         file.write(formatter.kirbytext)
         file.close()
 
